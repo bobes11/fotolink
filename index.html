@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Captura de Foto</title>
+</head>
+<body>
+  <h2>Haz clic para tomar tu foto</h2>
+  <video id="video" width="320" height="240" autoplay></video><br />
+  <button id="snap">Tomar foto</button><br />
+  <canvas id="canvas" width="320" height="240"></canvas>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const snap = document.getElementById('snap');
+    const context = canvas.getContext('2d');
+
+    // Pedir permiso y mostrar video
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        alert('Error al acceder a la cámara: ' + err);
+      });
+
+    snap.addEventListener('click', () => {
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      alert('Foto tomada. Ahora puedes compartirla.');
+    });
+  </script>
+</body>
+</html>
